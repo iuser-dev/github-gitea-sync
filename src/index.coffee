@@ -2,7 +2,7 @@
 
 {GITEA_TOKEN} = process.env
 
-GITEA_URL = 'https://gitea.com/api/v1/'
+GITEA_URL = 'https://git.iuser.link/api/v1/'
 
 fjson = (url, opt)=>
   console.log url
@@ -49,6 +49,6 @@ sync_li = (kind, args)=>
 
 
 #await sync_li 'user','i-user-link:iuser.link'
-await sync_li 'org','iuser-dev iuser-link:iuser'
+await sync_li 'org','iuser-dev:dev iuser-link:iuser'
 #console.log 'End'
 #process.exit()
