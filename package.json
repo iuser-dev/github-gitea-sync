@@ -1,5 +1,5 @@
 {
-  "dependencies": {},
+  "dependencies": { "await-sleep": "^0.0.1", "zx": "^7.0.8" },
   "type": "module",
   "devDependencies": {
     "@iuser/node-loader": "^0.0.19"

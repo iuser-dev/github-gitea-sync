@@ -1,12 +1,34 @@
 #!/usr/bin/env coffee
 
+> zx/globals:
+  fs > existsSync
+  os > homedir
+  path > join
+  await-sleep:sleep
+
 {GITEA_TOKEN} = process.env
 
 GITEA_URL = 'https://git.iuser.link/api/v1/'
 
+errlog = (err, ...args)=>
+  console.trace()
+  console.error err
+  for i from args
+    console.error i
+  return
+
 fjson = (url, opt)=>
   console.log url
-  (await fetch(url,opt)).json()
+  n = 5
+  loop
+    try
+      return (await fetch(url,opt)).json()
+    catch err
+      if --n
+        errlog err,url
+        sleep 3000
+      else
+        throw err
 
 gitea_post = (url,data)=>
   console.log '>',url, data
@@ -41,7 +63,6 @@ sync = (kind, github_user, gitea_user)=>
 
   [
     github_user
-    gitea_user
     exist
   ]
 
@@ -49,10 +70,14 @@ sync_li = (kind, args)=>
   args = args.split(' ')
   Promise.all (sync(kind, ...i.split(':')) for i from args)
 
-#"https://api.github.com/orgs/iuser-dev/repos?type=public"
+HOMEDIR = homedir()
 
+for [github_user, map] from await sync_li 'org','iuser-dev:dev iuser-link:iuser'
+  dir = join HOMEDIR, github_user
+  await $"mkdir -p #{dir}"
+  cd dir
+  for [git, ssh] from map.entries()
+    if not existsSync git
+      await $"git clone git@github.com:#{github_user}/#{git}.git"
 
-#await sync_li 'user','i-user-link:iuser.link'
-console.log await sync_li 'org','iuser-dev:dev iuser-link:iuser'
-#console.log 'End'
-#process.exit()
+process.exit()
