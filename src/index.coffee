@@ -39,7 +39,11 @@ sync = (kind, github_user, gitea_user)=>
       console.log await gitea_post(url+'repos', {name})
   # curl -k -X POST "https://<gitea-url>/api/v1/org/<organization>/repos" -H "content-type: application/json" -H "Authorization: token 45647956a7434b47c04b47c69579fb0123456789" --data '{"name":"<repo-name>"}'
 
-  return
+  [
+    github_user
+    gitea_user
+    exist
+  ]
 
 sync_li = (kind, args)=>
   args = args.split(' ')
@@ -49,6 +53,6 @@ sync_li = (kind, args)=>
 
 
 #await sync_li 'user','i-user-link:iuser.link'
-await sync_li 'org','iuser-dev:dev iuser-link:iuser'
+console.log await sync_li 'org','iuser-dev:dev iuser-link:iuser'
 #console.log 'End'
 #process.exit()
